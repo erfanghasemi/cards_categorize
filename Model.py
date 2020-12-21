@@ -206,14 +206,15 @@ class IO:
         return self.state
 
     def write(self):
-        print("Answer : ")
+        print("\nAnswer : ")
         print(self.goal_test)
-        print("-------------------------------------")
+        print("\n-------------------------------------")
+        print("\t\t\tInformation\n")
         print("Created nodes = "+str(self.created_nodes))
         print("Expanded nodes = " + str(self.expanded_nodes))
         print("Depth nodes = " + str(self.goal_test.cost))
-        print("-------------------------------------")
-        print("Transition\n")
+        print("\n-------------------------------------")
+        print("\t\t\tTransition\n")
 
         current_state = self.goal_test
         transition_stack = deque()

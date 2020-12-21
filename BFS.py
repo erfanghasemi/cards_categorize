@@ -26,7 +26,7 @@ class BFS:
         self.frontier.put_nowait(self.init_state)
         if self.init_state.goal_test():
             self.goal_state = self.init_state
-            self.io_handler = IO(self.goal_state, self.created_nodes, self.expanded_nodes)
+            self.io_handler = IO(self.goal_state, self.expanded_nodes, self.created_nodes)
             self.io_handler.write()
             return 1
 
@@ -50,7 +50,7 @@ class BFS:
                 if explored_exist and frontier_exist:
                     if child.goal_test():
                         self.goal_state = child
-                        self.io_handler = IO(self.goal_state, self.created_nodes, self.expanded_nodes)
+                        self.io_handler = IO(self.goal_state, self.expanded_nodes, self.created_nodes)
                         self.io_handler.write()
                         return 1
 
