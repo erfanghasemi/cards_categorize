@@ -21,6 +21,9 @@ class Card:
     def __str__(self):
         return str(self.number) + str(self.color)
 
+    def __hash__(self):
+        return hash((self.color, self.number))
+
 
 class Batch:
     def __init__(self):
@@ -99,6 +102,12 @@ class Batch:
             representation += card.__str__() + " "
         return representation
 
+    def __hash__(self):
+        hash_value = 0
+        for index in range(self.cards_count):
+            hash_value += hash(self.cards[index]) * index
+        return hash_value
+
 
 class State:
     def __init__(self, batches_number: int, cost: int, batches: list, parent, f_value: int):
@@ -106,6 +115,7 @@ class State:
         self.cost = cost
         self.batches = batches
         self.parent = parent
+        self.transition = None
         self.f_value = f_value
 
     def goal_test(self):
@@ -134,23 +144,25 @@ class State:
             if batch_beginning.is_empty():
                 continue
             for batch_destination in self.batches:
-                if batch_beginning.last_card_number() < batch_destination.last_card_number():
+                if int(batch_beginning.last_card_number()) < int(batch_destination.last_card_number()):
                     temp_batches = deepcopy(self.batches)
                     card = temp_batches[self.find_batch(batch_beginning)].pop_card()
                     temp_batches[self.find_batch(batch_destination)].insert_card(card)
                     new_state = State(self.batches_number, self.cost+1, temp_batches, self, self.f_value)
                     next_states.append(new_state)
+        return next_states
 
     def __eq__(self, other):
         for index in range(self.batches_number):
             if self.batches[index] != other.batches[index]:
                 return False
-        if self.cost != other.cost:
-            return False
-        if self.parent != other.parent:
-            return False
-
         return True
+
+    def __hash__(self):
+        hash_value = 0
+        for batch in self.batches:
+            hash_value += hash(batch)
+        return hash_value
 
 
 class IO:
@@ -169,7 +181,7 @@ class IO:
         self.cost = cost
 
     def read(self):
-        self.n, self.m, self.k = map(int, input().split())
+        self.k, self.m, self.n = map(int, input().split())
         for batch in range(self.k):
             line = input().split()
             self.batch = Batch()

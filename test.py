@@ -1,8 +1,11 @@
 from Model import *
+from collections import deque
+from queue import *
+from BFS import *
 
 
 test1_card = Card("R", 1)
-test2_card = Card("R", 5)
+test2_card = Card("R", 1)
 test3_card = Card("R", 6)
 test4_card = Card("G", 1)
 test5_card = Card("G", 5)
@@ -18,41 +21,74 @@ test3_batch = Batch()
 test4_batch = Batch()
 
 test1_batch.insert_card(test3_card)
-test1_batch.insert_card(test2_card)
+test1_batch.insert_card(test4_card)
 test1_batch.insert_card(test8_card)
-test1_batch.insert_card(test1_card)
+# test1_batch.insert_card(test1_card)
 
 
 
 
-test2_batch.insert_card(test4_card)
-test2_batch.insert_card(test8_card)
-test2_batch.insert_card(test6_card)
-test2_batch.insert_card(test1_card)
+test2_batch.insert_card(test3_card)
 test2_batch.insert_card(test5_card)
+test2_batch.insert_card(test8_card)
+# test2_batch.insert_card(test1_card)
+# test2_batch.insert_card(test5_card)
 
 
-# test3_batch.insert_card(test4_card)
-# test3_batch.insert_card(test7_card)
-# test3_batch.insert_card(test6_card)
-# test3_batch.insert_card(test9_card)
+
+test3_batch.insert_card(test4_card)
+test3_batch.insert_card(test5_card)
+test3_batch.insert_card(test7_card)
+test3_batch.insert_card(test8_card)
 # test3_batch.insert_card(test1_card)
 
-test4_batch.insert_card(test2_card)
-test4_batch.insert_card(test10_card)
+test4_batch.insert_card(test4_card)
+test4_batch.insert_card(test5_card)
 test4_batch.insert_card(test7_card)
-test4_batch.insert_card(test9_card)
+test4_batch.insert_card(test8_card)
 
-batch_list_1 = [test1_batch, test2_batch, test3_batch, test4_batch]
-batch_list_2 = [test1_batch, test3_batch]
+batch_list_1 = [test1_batch, test3_batch]
+batch_list_2 = [test1_batch, test4_batch]
+
+test1_state = State(2, 6, batch_list_1, None, 0)
+test2_state = State(2, 0, batch_list_2, None, 0)
+
+
+q = Queue()
+q.put_nowait(test1_state)
+q.put_nowait(test2_state)
+print(q.qsize())
+print(q.get_nowait())
+
+
+
+# s = set()
+# s.add(test1_state)
+#
+# print(test1_state in s)
+# print(test2_state in s)
+
 
 # print("================================================================================")
-test1_state = State(4, 0, batch_list_1, None, 0)
+#
+# print(hash(test1_state))
 # print(test1_state)
 # print("\n")
 # test1_state.next_states()
-# # test2_state = State(2, 1, batch_list_2, None, 0)
-
-test_IO = IO()
+#
+# print(hash(test1_state))
+# print(hash(test2_state))
+# test_IO = IO()
 # print(test_IO.read())
+#
+
+# bfs = BFS()
+# bfs.frontier.put(5)
+# bfs.frontier.put(3)
+# bfs.frontier.put(1)
+# print(bfs.frontier.get())
+# print(bfs.frontier.get())
+# print(bfs.find_frontier(6))
+
+
 
