@@ -110,12 +110,12 @@ class Batch:
 
 
 class State:
-    def __init__(self, batches_number: int, cost: int, batches: list, parent, f_value: int):
+    def __init__(self, batches_number: int, cost: int, batches: list, parent, f_value: int, transition: tuple):
         self.batches_number = batches_number
         self.cost = cost
         self.batches = batches
         self.parent = parent
-        self.transition = None
+        self.transition = transition
         self.f_value = f_value
 
     def goal_test(self):
@@ -146,9 +146,14 @@ class State:
             for batch_destination in self.batches:
                 if int(batch_beginning.last_card_number()) < int(batch_destination.last_card_number()):
                     temp_batches = deepcopy(self.batches)
-                    card = temp_batches[self.find_batch(batch_beginning)].pop_card()
-                    temp_batches[self.find_batch(batch_destination)].insert_card(card)
-                    new_state = State(self.batches_number, self.cost+1, temp_batches, self, self.f_value)
+
+                    index_beginning = self.find_batch(batch_beginning)
+                    index_destination = self.find_batch(batch_destination)
+
+                    card = temp_batches[index_beginning].pop_card()
+                    temp_batches[index_destination].insert_card(card)
+
+                    new_state = State(self.batches_number, self.cost+1, temp_batches, self, self.f_value, (index_beginning+1, index_destination+1))
                     next_states.append(new_state)
         return next_states
 
@@ -166,7 +171,7 @@ class State:
 
 
 class IO:
-    def __init__(self, cost: int = None, expanded_nodes: int = None, created_nodes: int = None):
+    def __init__(self, goal_test: State = None, expanded_nodes: int = None, created_nodes: int = None):
         self.state = None
         self.batches = []
         self.batch = None
@@ -178,7 +183,7 @@ class IO:
         self.k = None
         self.expanded_nodes = expanded_nodes
         self.created_nodes = created_nodes
-        self.cost = cost
+        self.goal_test = goal_test
 
     def read(self):
         self.k, self.m, self.n = map(int, input().split())
@@ -197,8 +202,27 @@ class IO:
                 self.batch.insert_card(self.card)
 
             self.batches.append(self.batch)
-        self.state = State(self.k, 0, self.batches, None, 0)
+        self.state = State(self.k, 0, self.batches, None, 0, None)
         return self.state
 
     def write(self):
-        pass
+        print("Answer : ")
+        print(self.goal_test)
+        print("-------------------------------------")
+        print("Created nodes = "+str(self.created_nodes))
+        print("Expanded nodes = " + str(self.expanded_nodes))
+        print("Depth nodes = " + str(self.goal_test.cost))
+        print("-------------------------------------")
+        print("Transition\n")
+
+        current_state = self.goal_test
+        transition_stack = deque()
+        for i in range(self.goal_test.cost):
+            transition = "Top card in batch " + str(current_state.transition[0]) + " moved to batch " + str(current_state.transition[1])
+            transition_stack.append(transition)
+            current_state = current_state.parent
+
+        for j in range(self.goal_test.cost):
+            print(transition_stack.pop())
+
+        print("-------------------------------------")
