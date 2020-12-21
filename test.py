@@ -44,12 +44,15 @@ test4_batch.insert_card(test7_card)
 test4_batch.insert_card(test9_card)
 
 batch_list_1 = [test1_batch, test2_batch, test3_batch, test4_batch]
-# batch_list_2 = [test1_batch, test3_batch]
+batch_list_2 = [test1_batch, test3_batch]
 
-print("================================================================================")
+# print("================================================================================")
 test1_state = State(4, 0, batch_list_1, None, 0)
-print(test1_state)
-print("\n")
-test1_state.next_states()
-# test2_state = State(2, 1, batch_list_2, None, 0)
+# print(test1_state)
+# print("\n")
+# test1_state.next_states()
+# # test2_state = State(2, 1, batch_list_2, None, 0)
+
+test_IO = IO()
+# print(test_IO.read())
 

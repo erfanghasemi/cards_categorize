@@ -140,8 +140,6 @@ class State:
                     temp_batches[self.find_batch(batch_destination)].insert_card(card)
                     new_state = State(self.batches_number, self.cost+1, temp_batches, self, self.f_value)
                     next_states.append(new_state)
-                    print(new_state)
-                    print("\n")
 
     def __eq__(self, other):
         for index in range(self.batches_number):
@@ -156,6 +154,39 @@ class State:
 
 
 class IO:
-    def __init__(self):
-        pass
+    def __init__(self, cost: int = None, expanded_nodes: int = None, created_nodes: int = None):
+        self.state = None
+        self.batches = []
+        self.batch = None
+        self.card = None
+        self.color_card = None
+        self.number_card = None
+        self.n = None
+        self.m = None
+        self.k = None
+        self.expanded_nodes = expanded_nodes
+        self.created_nodes = created_nodes
+        self.cost = cost
 
+    def read(self):
+        self.n, self.m, self.k = map(int, input().split())
+        for batch in range(self.k):
+            line = input().split()
+            self.batch = Batch()
+            if line[0] == "#":
+                self.batches.append(self.batch)
+                continue
+
+            for item in line:
+
+                self.number_card = item[0]
+                self.color_card = item[1]
+                self.card = Card(self.color_card, self.number_card)
+                self.batch.insert_card(self.card)
+
+            self.batches.append(self.batch)
+        self.state = State(self.k, 0, self.batches, None, 0)
+        return self.state
+
+    def write(self):
+        pass
