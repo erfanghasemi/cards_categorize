@@ -7,7 +7,7 @@ from BFS import *
 test1_card = Card("R", 1)
 test2_card = Card("R", 1)
 test3_card = Card("R", 6)
-test4_card = Card("G", 1)
+test4_card = Card("G", 123)
 test5_card = Card("G", 5)
 test6_card = Card("G", 3)
 test7_card = Card("G", 3)
@@ -20,21 +20,19 @@ test2_batch = Batch()
 test3_batch = Batch()
 test4_batch = Batch()
 
+
 test1_batch.insert_card(test3_card)
 test1_batch.insert_card(test4_card)
 test1_batch.insert_card(test8_card)
-# test1_batch.insert_card(test1_card)
-
-
 
 
 test2_batch.insert_card(test3_card)
 test2_batch.insert_card(test5_card)
 test2_batch.insert_card(test8_card)
-# test2_batch.insert_card(test1_card)
-# test2_batch.insert_card(test5_card)
 
-
+print(test1_batch == test2_batch)
+print(hash(test1_batch))
+print(hash(test2_batch))
 
 test3_batch.insert_card(test4_card)
 test3_batch.insert_card(test5_card)
@@ -50,6 +48,10 @@ test4_batch.insert_card(test8_card)
 batch_list_1 = [test1_batch, test3_batch]
 batch_list_2 = [test1_batch, test2_batch]
 
+
+
+
+
 test1_state = State(2, 6, batch_list_1, None, 0, None, 65)
 test2_state = State(2, 0, batch_list_2, None, 0, None, 588)
 
@@ -59,16 +61,16 @@ test2_state = State(2, 0, batch_list_2, None, 0, None, 588)
 # q.put_nowait(test2_state)
 # print(q.qsize())
 # print(q.get_nowait())
-q = PriorityQueue()
+# q = PriorityQueue()
+# #
+# q.put_nowait(test1_state)
+# q.put_nowait(test2_state)
+# # q.put_nowait("reza")
+# # q.put_nowait("amir")
 #
-q.put_nowait(test1_state)
-q.put_nowait(test2_state)
-# q.put_nowait("reza")
-# q.put_nowait("amir")
-
-#
-print(q.get_nowait())
-print(q.get_nowait())
+# #
+# print(q.get_nowait())
+# print(q.get_nowait())
 # print(q.get_nowait()[1])
 # print(q.get_nowait()[1])
 

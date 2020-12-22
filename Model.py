@@ -8,12 +8,6 @@ class Card:
         self.color = color
         self.number = number
 
-    def get_color(self):
-        return self.color
-
-    def get_number(self):
-        return self.number
-
     def __eq__(self, other):
         if isinstance(other, Card):
             return self.number == other.number and self.color == other.color
@@ -31,6 +25,8 @@ class Batch:
         self.cards = deque()
         self.sorted_until = 0
         self.batch_color = None
+        self.colors = ""
+        self.numbers = ""
 
     def is_empty(self):
         return self.cards_count == 0
@@ -65,6 +61,8 @@ class Batch:
     def insert_card(self, card: Card):
         self.cards.append(card)
         self.update_sorted_index("PUSH", card)
+        self.colors += card.color
+        self.numbers += str(card.number)
 
     def pop_card(self):
         if self.is_empty():
@@ -72,6 +70,8 @@ class Batch:
             return -1
         card = self.cards.pop()
         self.update_sorted_index("POP", card)
+        self.colors = self.colors[:-1]
+        self.numbers = self.numbers[:-(len(str(card.number)))]
         return card
 
     def is_sorted(self):
@@ -83,14 +83,9 @@ class Batch:
         return self.cards.__getitem__(self.cards_count-1).number
 
     def __eq__(self, other):
-        try:
-            for i in range(self.cards.__len__()):
-                if self.cards.__getitem__(i) == other.cards.__getitem__(i):
-                    continue
-                else:
-                    return False
+        if self.colors == other.colors and self.numbers == other.numbers:
             return True
-        except IndexError:
+        else:
             return False
 
     def __str__(self):
@@ -103,10 +98,7 @@ class Batch:
         return representation
 
     def __hash__(self):
-        hash_value = 0
-        for index in range(self.cards_count):
-            hash_value += hash(self.cards[index]) * index
-        return hash_value
+        return hash((self.colors, self.numbers))
 
 
 class State:
@@ -123,7 +115,6 @@ class State:
         total_sorted_card = 0
         for batch in self.batches:
             total_sorted_card += batch.sorted_until
-
         return self.total_card - total_sorted_card
 
     def f(self):
@@ -176,10 +167,10 @@ class State:
         return True
 
     def __hash__(self):
-        hash_value = 0
+        hash_value = ""
         for batch in self.batches:
-            hash_value += hash(batch)
-        return hash_value
+            hash_value += str(hash(batch))
+        return hash(hash_value)
 
     def __ge__(self, other):
         return self.f() >= other.f()
@@ -242,4 +233,4 @@ class IO:
         for j in range(self.goal_test.cost):
             print(transition_stack.pop())
 
-        print("-------------------------------------")
+        print("\n---------------------------------------------------\n")
