@@ -215,7 +215,7 @@ class IO:
         return self.state
 
     def write(self):
-        print("\nAnswer : ")
+        print("-------------------------Answer-------------------------\n")
         print(self.goal_test)
         print("\n---------------------Information----------------------\n")
         print("Created nodes = "+str(self.created_nodes))

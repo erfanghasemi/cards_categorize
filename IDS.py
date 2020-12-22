@@ -1,4 +1,3 @@
-from Model import *
 from DLS import *
 
 
@@ -28,5 +27,5 @@ class IDS:
 
 
 if __name__ == "__main__":
-    ids_search = IDS(9)
+    ids_search = IDS(20)
     ids_search.search()

@@ -12,18 +12,10 @@ class BFS:
         self.frontier = Queue()
         self.explored = set()
 
-    def find_frontier(self, target_state: State):
-        contain = 1
-        for i in range(self.frontier.qsize()):
-            state = self.frontier.get_nowait()
-            if state == target_state:
-                contain = 0
-            self.frontier.put_nowait(state)
-        return contain
-
     def search(self):
         self.init_state = self.io_handler.read()
         self.frontier.put_nowait(self.init_state)
+
         if self.init_state.goal_test():
             self.goal_state = self.init_state
             self.io_handler = IO(self.goal_state, self.expanded_nodes, self.created_nodes)
@@ -31,29 +23,32 @@ class BFS:
             return 1
 
         while True:
-
             if self.frontier.empty():
                 print("Failure  :( ")
                 return -1
 
             state = self.frontier.get_nowait()
-            self.explored.add(state)
+            if state in self.explored:
+                continue
+
             self.expanded_nodes += 1
+
+            if state.goal_test():
+                self.goal_state = state
+                self.io_handler = IO(self.goal_state, self.expanded_nodes, self.created_nodes)
+                self.io_handler.write()
+                return 1
+
+            self.explored.add(state)
 
             childes = state.next_states()
 
             for child in childes:
-                explored_exist = not(child in self.explored)
-                frontier_exist = self.find_frontier(child)
+                if child is None:
+                    continue
 
-                if explored_exist and frontier_exist:
+                if not(child in self.explored):
                     self.created_nodes += 1
-                    if child.goal_test():
-                        self.goal_state = child
-                        self.io_handler = IO(self.goal_state, self.expanded_nodes, self.created_nodes)
-                        self.io_handler.write()
-                        return 1
-
                     self.frontier.put_nowait(child)
 
 
