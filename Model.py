@@ -110,13 +110,25 @@ class Batch:
 
 
 class State:
-    def __init__(self, batches_number: int, cost: int, batches: list, parent, f_value: int, transition: tuple):
+    def __init__(self, batches_number: int, cost: int, batches: list, parent, f_value: int, transition: tuple, total_card: int):
         self.batches_number = batches_number
         self.cost = cost
         self.batches = batches
         self.parent = parent
         self.transition = transition
         self.f_value = f_value
+        self.total_card = total_card
+
+    def heuristic(self):
+        total_sorted_card = 0
+        for batch in self.batches:
+            total_sorted_card += batch.sorted_until
+
+        return self.total_card - total_sorted_card
+
+    def f(self):
+        self.f_value = self.cost + self.heuristic()
+        return self.f_value
 
     def goal_test(self):
         for batch in self.batches:
@@ -153,7 +165,7 @@ class State:
                     card = temp_batches[index_beginning].pop_card()
                     temp_batches[index_destination].insert_card(card)
 
-                    new_state = State(self.batches_number, self.cost+1, temp_batches, self, self.f_value, (index_beginning+1, index_destination+1))
+                    new_state = State(self.batches_number, self.cost+1, temp_batches, self, self.f_value, (index_beginning+1, index_destination+1), self.total_card)
                     next_states.append(new_state)
         return next_states
 
@@ -168,6 +180,12 @@ class State:
         for batch in self.batches:
             hash_value += hash(batch)
         return hash_value
+
+    def __ge__(self, other):
+        return self.f() >= other.f()
+
+    def __lt__(self, other):
+        return self.f() < other.f()
 
 
 class IO:
@@ -202,19 +220,17 @@ class IO:
                 self.batch.insert_card(self.card)
 
             self.batches.append(self.batch)
-        self.state = State(self.k, 0, self.batches, None, 0, None)
+        self.state = State(self.k, 0, self.batches, None, 0, None, self.m*self.n)
         return self.state
 
     def write(self):
         print("\nAnswer : ")
         print(self.goal_test)
-        print("\n-------------------------------------")
-        print("\t\t\tInformation\n")
+        print("\n---------------------Information----------------------\n")
         print("Created nodes = "+str(self.created_nodes))
         print("Expanded nodes = " + str(self.expanded_nodes))
         print("Depth nodes = " + str(self.goal_test.cost))
-        print("\n-------------------------------------")
-        print("\t\t\tTransition\n")
+        print("\n---------------------Transition---------------------\n")
 
         current_state = self.goal_test
         transition_stack = deque()

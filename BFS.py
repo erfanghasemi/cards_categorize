@@ -41,13 +41,13 @@ class BFS:
             self.expanded_nodes += 1
 
             childes = state.next_states()
-            self.created_nodes += len(childes)
 
             for child in childes:
                 explored_exist = not(child in self.explored)
                 frontier_exist = self.find_frontier(child)
 
                 if explored_exist and frontier_exist:
+                    self.created_nodes += 1
                     if child.goal_test():
                         self.goal_state = child
                         self.io_handler = IO(self.goal_state, self.expanded_nodes, self.created_nodes)

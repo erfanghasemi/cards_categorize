@@ -48,26 +48,29 @@ test4_batch.insert_card(test7_card)
 test4_batch.insert_card(test8_card)
 
 batch_list_1 = [test1_batch, test3_batch]
-batch_list_2 = [test1_batch, test4_batch]
+batch_list_2 = [test1_batch, test2_batch]
 
-test1_state = State(2, 6, batch_list_1, None, 0)
-test2_state = State(2, 0, batch_list_2, None, 0)
+test1_state = State(2, 6, batch_list_1, None, 0, None, 65)
+test2_state = State(2, 0, batch_list_2, None, 0, None, 588)
 
 
-q = Queue()
+# q = Queue()
+# q.put_nowait(test1_state)
+# q.put_nowait(test2_state)
+# print(q.qsize())
+# print(q.get_nowait())
+q = PriorityQueue()
+#
 q.put_nowait(test1_state)
 q.put_nowait(test2_state)
-print(q.qsize())
-print(q.get_nowait())
+# q.put_nowait("reza")
+# q.put_nowait("amir")
 
-
-
-# s = set()
-# s.add(test1_state)
 #
-# print(test1_state in s)
-# print(test2_state in s)
-
+print(q.get_nowait())
+print(q.get_nowait())
+# print(q.get_nowait()[1])
+# print(q.get_nowait()[1])
 
 # print("================================================================================")
 #
@@ -80,6 +83,14 @@ print(q.get_nowait())
 # print(hash(test2_state))
 # test_IO = IO()
 # print(test_IO.read())
+
+# s = set()
+# s.add(test1_state)
+#
+# print(test1_state in s)
+# print(test2_state in s)
+
+
 #
 
 # bfs = BFS()

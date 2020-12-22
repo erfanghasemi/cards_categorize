@@ -43,14 +43,12 @@ class DLS:
             self.expanded_nodes += 1
 
             childes = state.next_states()
-            self.created_nodes += len(childes)
 
             if state.goal_test():
                 self.goal_state = state
-                self.io_handler = IO(self.goal_state, self.created_nodes, self.expanded_nodes)
-                self.io_handler.write()
-                return 1
+                return self.expanded_nodes, self.created_nodes, self.goal_state
 
             for child in childes:
+                self.created_nodes += 1
                 self.frontier.put_nowait(child)
 
