@@ -111,14 +111,14 @@ class State:
         self.f_value = f_value
         self.total_card = total_card
 
-    def heuristic(self):
+    def heuristic(self, batches_list):
         total_sorted_card = 0
-        for batch in self.batches:
+        for batch in batches_list:
             total_sorted_card += batch.sorted_until
         return self.total_card - total_sorted_card
 
-    def f(self):
-        self.f_value = self.cost + self.heuristic()
+    def f(self, cost, batches_list):
+        self.f_value = cost + self.heuristic(batches_list)
         return self.f_value
 
     def goal_test(self):
@@ -156,7 +156,7 @@ class State:
                     card = temp_batches[index_beginning].pop_card()
                     temp_batches[index_destination].insert_card(card)
 
-                    new_state = State(self.batches_number, self.cost+1, temp_batches, self, self.f_value, (index_beginning+1, index_destination+1), self.total_card)
+                    new_state = State(self.batches_number, self.cost+1, temp_batches, self, self.f(self.cost+1, temp_batches), (index_beginning+1, index_destination+1), self.total_card)
                     next_states.append(new_state)
         return next_states
 
@@ -173,10 +173,10 @@ class State:
         return hash(hash_value)
 
     def __ge__(self, other):
-        return self.f() >= other.f()
+        return self.f_value >= other.f_value
 
     def __lt__(self, other):
-        return self.f() < other.f()
+        return self.f_value < other.f_value
 
 
 class IO:
